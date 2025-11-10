@@ -6,7 +6,7 @@ COPY ./docker/php/php.ini-production $PHP_INI_DIR/php.ini
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions @composer-2 opcache gd pgsql pdo_pgsql 
+RUN install-php-extensions @composer-2 opcache gd pgsql pdo_pgsql
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_MEMORY_LIMIT=-1
@@ -28,7 +28,7 @@ COPY ./docker/php/php.ini-production $PHP_INI_DIR/php.ini
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions opcache gd pgsql pdo_pgsql 
+RUN install-php-extensions opcache gd pgsql pdo_pgsql
 
 RUN apk --no-cache add bash
 
@@ -36,7 +36,7 @@ COPY --from=cli /app /var/www/html
 
 WORKDIR /var/www/html
 
-RUN chown -R 1000:0 /var/www/html/storage /var/www/html/bootstrap/cache \
+RUN chown -R 1000:1000 /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 USER 1000
