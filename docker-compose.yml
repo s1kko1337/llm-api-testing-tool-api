@@ -1,0 +1,67 @@
+services:
+  php-fpm:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: fpm
+    container_name: php-fpm
+    networks:
+      - llm-testing-tool-api
+
+  php-cli:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: cli
+    container_name: php-cli
+    volumes:
+      - ./:/app
+    command: /bin/sh -c "composer install && php artisan config:clear && php artisan cache:clear"
+    networks:
+      - llm-testing-tool-api
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: nginx
+    container_name: nginx
+    ports:
+      - ${APP_WEB_PORT}:80
+      - "443:443"
+      - "6001:6001"
+    volumes:
+      - ./:/var/www/html
+    env_file:
+      - path: .env
+    environment:
+      - NGINX_CACHE_CONTROL="no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+    networks:
+      - llm-testing-tool-api
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - pgsql:/var/lib/postgresql/data/pgdata
+    env_file:
+      - path: .env
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=utf8 --lc-collate=C --lc-ctype=C
+      - POSTGRES_DB=${DB_DATABASE}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 54321:5432
+    networks:
+      - llm-testing-tool-api
+
+
+volumes:
+  pgsql:
+
+networks:
+  llm-testing-tool-api:
+    driver: bridge
