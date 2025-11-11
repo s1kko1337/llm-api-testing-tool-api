@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
 class CustomToken extends SanctumPersonalAccessToken
@@ -9,7 +10,7 @@ class CustomToken extends SanctumPersonalAccessToken
 
     public function can($ability)
     {
-        if (!$this->tokenable->can($ability)) {
+        if (! $this->tokenable->can($ability)) {
             return false;
         }
 
@@ -24,7 +25,7 @@ class CustomToken extends SanctumPersonalAccessToken
         return true;
     }
 
-        protected function canDb($ability): bool
+    protected function canDb($ability): bool
     {
         return array_key_exists($ability, array_flip($this->abilities));
     }

@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return response(json_encode(
-//         'hello: world'
-//     ));
-// });
+Route::any('/', function () {
+    return response((
+        date('D M Y')
+    ));
+});

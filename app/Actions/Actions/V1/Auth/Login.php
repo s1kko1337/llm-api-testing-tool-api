@@ -12,12 +12,11 @@ class Login
     /**
      * Попытка аунтефикации и предоставления токена пользователю с гарантией единственноей сессии
      *
-     * @param array $credentials
      * @return array|null ['user' => User, 'token' => string]
      */
     public function handle(array $credentials): ?array
     {
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return null;
         }
 
@@ -29,7 +28,7 @@ class Login
 
         return [
             'user' => $user,
-            'token' => $token
+            'token' => $token,
         ];
     }
 }

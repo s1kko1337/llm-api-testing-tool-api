@@ -4,6 +4,7 @@ namespace App\Actions\Actions\V1\Auth;
 
 use App\Enums\Roles;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class Register
@@ -13,7 +14,6 @@ class Register
     /**
      * Создание нового пользоваеля с ролью "user"
      *
-     * @param array $data
      * @return array ['user' => User, 'token' => string]
      */
     public function handle(array $data): array
@@ -21,13 +21,13 @@ class Register
         $user = User::create($data);
         $user->assignRole(Roles::USER_ROLE);
 
-        // event(new Registered($user));
+        event(new Registered($user));
 
         $token = $user->createToken("Token of user: {$user->name}")->plainTextToken;
 
         return [
             'user' => $user,
-            'token' => $token
+            'token' => $token,
         ];
     }
 }

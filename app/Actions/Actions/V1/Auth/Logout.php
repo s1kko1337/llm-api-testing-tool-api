@@ -11,9 +11,6 @@ class Logout
 
     /**
      * Выход из приложения, удаление текущего токена
-     *
-     * @param User $user
-     * @return void
      */
     public function handle(User $user): void
     {

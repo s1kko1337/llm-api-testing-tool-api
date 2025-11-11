@@ -12,7 +12,6 @@ use App\Http\Resources\Api\V1\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
-
 class AuthController extends Controller
 {
     public function register(StoreUserRequest $request): JsonResponse
@@ -21,7 +20,7 @@ class AuthController extends Controller
 
         return response()->json([
             ...(new UserResource($result['user']))->resolve(),
-            'token' => $result['token']
+            'token' => $result['token'],
         ], 201);
     }
 
@@ -37,7 +36,7 @@ class AuthController extends Controller
 
         return response()->json([
             ...(new UserResource($result['user']))->resolve(),
-            'token' => $result['token']
+            'token' => $result['token'],
         ], 200);
     }
 
