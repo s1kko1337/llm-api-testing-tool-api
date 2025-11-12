@@ -2,11 +2,16 @@
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Email\EmailVerificationController;
+use App\Http\Controllers\Api\V1\Password\PasswordResetController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware('throttle:api')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+
+    Route::post('/forgot-password', [PasswordResetController::class, 'revoke']);
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'invoke'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'update'])->name('password.update');
 
     Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
         ->middleware('signed')

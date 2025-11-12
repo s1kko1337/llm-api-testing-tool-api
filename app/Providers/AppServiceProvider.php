@@ -46,12 +46,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         ResetPassword::createUrlUsing(function ($user, string $token) {
-            $frontend_url = 'http://localhost'; // В проде убрать
-            return rtrim($frontend_url, '/') . '/reset-password/' . $token . '?email=' . urlencode($user->email);
+            return env('APP_URL') . '/api/v1' . '/reset-password/' . $token . '?email=' . urlencode($user->email);
         });
 
         ResetPassword::toMailUsing(function ($notifiable, string $token) {
-            $url = 'http://localhost' . '/reset-password/' . $token . '?email=' . urlencode($notifiable->getEmailForPasswordReset());
+            $url = env('APP_URL') . '/api/v1' . '/reset-password/' . $token . '?email=' . urlencode($notifiable->getEmailForPasswordReset());
 
             return (new MailMessage)
                 ->subject('Сброс пароля')
